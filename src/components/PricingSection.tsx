@@ -56,7 +56,9 @@ const fadeUp = {
   visible: { opacity: 1, y: 0 },
 };
 
-export default function PricingSection({ onOpenModal }: { onOpenModal: () => void }) {
+type Plan = "free" | "pro" | "custom";
+
+export default function PricingSection({ onOpenModal }: { onOpenModal: (plan: Plan) => void }) {
   return (
     <section id="pricing" className="py-24 md:py-32">
       <div className="max-w-7xl mx-auto px-6">
@@ -121,25 +123,16 @@ export default function PricingSection({ onOpenModal }: { onOpenModal: () => voi
                 ))}
               </ul>
 
-              {plan.name === "Custom" ? (
-                <a
-                  href="mailto:hello@scribepilot.dev"
-                  className="block text-center text-sm font-medium py-2.5 rounded-lg transition-all border border-border hover:border-border-hover text-text-secondary hover:text-text-primary"
-                >
-                  {plan.cta}
-                </a>
-              ) : (
-                <button
-                  onClick={onOpenModal}
-                  className={`w-full block text-center text-sm font-medium py-2.5 rounded-lg transition-all ${
-                    plan.highlighted
-                      ? "bg-accent hover:bg-accent-hover text-white hover:shadow-[0_0_24px_rgba(139,92,246,0.25)]"
-                      : "border border-border hover:border-border-hover text-text-secondary hover:text-text-primary"
-                  }`}
-                >
-                  {plan.cta}
-                </button>
-              )}
+              <button
+                onClick={() => onOpenModal(plan.name.toLowerCase() as Plan)}
+                className={`w-full block text-center text-sm font-medium py-2.5 rounded-lg transition-all ${
+                  plan.highlighted
+                    ? "bg-accent hover:bg-accent-hover text-white hover:shadow-[0_0_24px_rgba(139,92,246,0.25)]"
+                    : "border border-border hover:border-border-hover text-text-secondary hover:text-text-primary"
+                }`}
+              >
+                {plan.cta}
+              </button>
             </motion.div>
           ))}
         </div>

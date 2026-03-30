@@ -4,25 +4,60 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type Status = "idle" | "loading" | "success" | "error";
+type Plan = "free" | "pro" | "custom";
+
+const planConfig = {
+  free: {
+    title: "Get early access",
+    badge: "Free",
+    badgeClass: "bg-accent/15 text-accent border-accent/20",
+    copy: "Join the waitlist — be first to know when we launch.",
+    submitLabel: "Join waitlist",
+    successMsg: "We'll reach out as soon as ScribePilot is ready for you.",
+  },
+  pro: {
+    title: "Get early access",
+    badge: "Pro",
+    badgeClass: "bg-violet-500/15 text-violet-300 border-violet-400/20",
+    copy: "Be first in line when Pro launches — priority access guaranteed.",
+    submitLabel: "Join Pro waitlist",
+    successMsg: "You're first in line. We'll reach out when Pro is ready.",
+  },
+  custom: {
+    title: "Let's talk",
+    badge: "Enterprise",
+    badgeClass: "bg-blue-500/10 text-blue-300 border-blue-400/20",
+    copy: "Tell us about your team and we'll put together a custom plan.",
+    submitLabel: "Send request",
+    successMsg: "Got it — we'll reach out within 1 business day.",
+  },
+};
 
 export default function WaitlistModal({
   open,
   onClose,
+  plan = "free",
 }: {
   open: boolean;
   onClose: () => void;
+  plan?: Plan;
 }) {
   const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Focus input when modal opens
+  const config = planConfig[plan];
+  const isCustom = plan === "custom";
+
+  // Reset + focus when modal opens
   useEffect(() => {
     if (open) {
       setTimeout(() => inputRef.current?.focus(), 100);
       setStatus("idle");
       setEmail("");
+      setMessage("");
       setErrorMsg("");
     }
   }, [open]);
@@ -49,7 +84,6 @@ export default function WaitlistModal({
     const webhookUrl = process.env.NEXT_PUBLIC_SHEETS_WEBHOOK_URL;
 
     if (!webhookUrl || webhookUrl.includes("YOUR_SCRIPT_ID")) {
-      // Dev mode — simulate success
       await new Promise((r) => setTimeout(r, 800));
       setStatus("success");
       return;
@@ -58,11 +92,10 @@ export default function WaitlistModal({
     try {
       await fetch(webhookUrl, {
         method: "POST",
-        mode: "no-cors", // Google Apps Script requires no-cors
+        mode: "no-cors",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, plan, message: message || "" }),
       });
-      // no-cors means we can't read the response — assume success
       setStatus("success");
     } catch {
       setStatus("error");
@@ -118,9 +151,7 @@ export default function WaitlistModal({
                     </svg>
                   </div>
                   <h2 className="text-xl font-bold mb-2">You&apos;re on the list!</h2>
-                  <p className="text-text-secondary text-sm">
-                    We&apos;ll reach out as soon as ScribePilot is ready for you.
-                  </p>
+                  <p className="text-text-secondary text-sm">{config.successMsg}</p>
                   <button
                     onClick={onClose}
                     className="mt-6 text-sm text-text-tertiary hover:text-text-primary transition-colors"
@@ -134,14 +165,12 @@ export default function WaitlistModal({
                   {/* Header */}
                   <div className="mb-6">
                     <div className="flex items-center gap-2 mb-3">
-                      <h2 className="text-xl font-bold">Get early access</h2>
-                      <span className="text-xs font-medium bg-accent/15 text-accent border border-accent/20 rounded-full px-2 py-0.5">
-                        Free
+                      <h2 className="text-xl font-bold">{config.title}</h2>
+                      <span className={`text-xs font-medium border rounded-full px-2 py-0.5 ${config.badgeClass}`}>
+                        {config.badge}
                       </span>
                     </div>
-                    <p className="text-text-secondary text-sm leading-relaxed">
-                      Join the waitlist — be first to know when we launch.
-                    </p>
+                    <p className="text-text-secondary text-sm leading-relaxed">{config.copy}</p>
                   </div>
 
                   {/* Form */}
@@ -158,6 +187,16 @@ export default function WaitlistModal({
                       className="w-full bg-bg border border-border rounded-lg px-4 py-3 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all"
                     />
 
+                    {isCustom && (
+                      <textarea
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        placeholder="Describe your team size, use case, or any specific requirements…"
+                        rows={4}
+                        className="w-full bg-bg border border-border rounded-lg px-4 py-3 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all resize-none"
+                      />
+                    )}
+
                     {errorMsg && (
                       <p className="text-xs text-red-400">{errorMsg}</p>
                     )}
@@ -173,10 +212,10 @@ export default function WaitlistModal({
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
                           </svg>
-                          Joining…
+                          Sending…
                         </span>
                       ) : (
-                        "Join waitlist"
+                        config.submitLabel
                       )}
                     </button>
                   </form>
