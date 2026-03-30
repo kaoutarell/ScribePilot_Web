@@ -1,8 +1,10 @@
 "use client";
 
+import { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import indexWorkspaceGif from "@/assets/index-workspace-gif.gif";
-import changeFromPromptsGif from "@/assets/change-from-prompts-gif.gif";
+
+const indexWorkspaceMp4 = "/videos/index-workspace-gif.mp4";
+const changeFromPromptsMp4 = "/videos/change-from-prompts-gif.mp4";
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -16,8 +18,9 @@ const gifFeatures = [
       "Deep repo awareness",
       "Project-specific patterns",
     ],
-    gif: indexWorkspaceGif.src,
+    video: indexWorkspaceMp4,
     alt: "ScribePilot indexing workspace demo",
+    videoTitle: "ScribePilot's included workspace indexer",
   },
   {
     title: "Create, edit, and delete code from prompts",
@@ -28,8 +31,9 @@ const gifFeatures = [
       "Multi-file operations",
       "Inline transformations",
     ],
-    gif: changeFromPromptsGif.src,
+    video: changeFromPromptsMp4,
     alt: "ScribePilot code changes from prompts demo",
+    videoTitle: "ScribePilot VS Code extension",
   },
 ];
 
@@ -58,21 +62,36 @@ const cardFeatures = [
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function GifFrame({ src, alt }: { src: string; alt: string }) {
+function VideoFrame({ src, alt, videoTitle }: { src: string; alt: string; videoTitle: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) videoRef.current.playbackRate = 1.5;
+  }, []);
+
   return (
     <div className="relative">
-      {/* Subtle purple glow behind frame */}
       <div className="absolute -inset-3 bg-accent/5 rounded-2xl blur-xl pointer-events-none" />
       <div className="relative rounded-xl border border-white/[0.08] bg-card overflow-hidden shadow-xl shadow-black/50 ring-1 ring-white/[0.04]">
         <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/[0.06] bg-black/20">
           <div className="flex gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-red-500/50" />
-            <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/50" />
-            <div className="w-2.5 h-2.5 rounded-full bg-green-500/50" />
+            <div className="w-2.5 h-2.5 rounded-full bg-red-500/50"/>
+            <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/50"/>
+            <div className="w-2.5 h-2.5 rounded-full bg-green-500/50"/>
           </div>
+          <span className="text-xs text-text-tertiary font-mono ml-2">{videoTitle}</span>
         </div>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={src} alt={alt} className="w-full h-auto block" />
+        <video
+            ref={videoRef}
+            autoPlay
+            loop
+            muted
+            playsInline
+          className="w-full h-auto block"
+          aria-label={alt}
+        >
+          <source src={src} type="video/mp4" />
+        </video>
       </div>
     </div>
   );
@@ -123,7 +142,7 @@ export default function FeaturesSection() {
           </p>
         </motion.div>
 
-        {/* GIF features — alternating full-width rows */}
+        {/* Video features — alternating full-width rows */}
         <div className="space-y-24 md:space-y-32 mb-24 md:mb-32">
           {gifFeatures.map((feature, i) => (
             <motion.div
@@ -153,9 +172,9 @@ export default function FeaturesSection() {
                 </ul>
               </div>
 
-              {/* GIF */}
+              {/* Video */}
               <div className={i % 2 === 1 ? "lg:order-1" : ""}>
-                <GifFrame src={feature.gif} alt={feature.alt} />
+                <VideoFrame src={feature.video} alt={feature.alt} videoTitle={feature.videoTitle} />
               </div>
             </motion.div>
           ))}

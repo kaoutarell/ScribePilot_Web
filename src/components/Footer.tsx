@@ -12,12 +12,13 @@ export default function Footer() {
     <footer className="border-t border-border py-8">
       <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         <a href="#" className="flex items-center">
-          <Image src={logo} alt="ScribePilot" height={22} />
+          <Image src={logo} alt="ScribePilot" height={50}/>
+          <p className="bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent">ScribePilot</p>
         </a>
         <div className="flex items-center gap-6">
           {footerLinks.map((link) => (
-            <a
-              key={link.label}
+              <a
+                  key={link.label}
               href={link.href}
               className="text-xs text-text-tertiary hover:text-text-secondary transition-colors"
             >

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 
-export default function CTASection() {
+export default function CTASection({ onOpenModal }: { onOpenModal: () => void }) {
   return (
     <section className="py-24 md:py-32 relative overflow-hidden">
       {/* Background glow */}
@@ -23,15 +23,15 @@ export default function CTASection() {
           understands their code.
         </p>
         <div className="flex flex-wrap justify-center gap-3">
-          <a
-            href="#"
+          <button
+            onClick={onOpenModal}
             className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-medium px-6 py-3 rounded-lg transition-all hover:shadow-[0_0_24px_rgba(139,92,246,0.25)]"
           >
             Start for free
             <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M6 12l4-4-4-4" />
             </svg>
-          </a>
+          </button>
           <a
             href="#"
             className="inline-flex items-center gap-2 text-text-secondary hover:text-text-primary border border-border hover:border-border-hover font-medium px-6 py-3 rounded-lg transition-all"
