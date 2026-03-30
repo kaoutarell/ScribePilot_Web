@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "ScribePilot — AI Pair Programmer, Built to Stay Private",
   description:
     "ScribePilot is a codebase-aware AI coding assistant with privacy-first architecture. Get context-aware suggestions without your code leaving your organization.",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({

@@ -2,16 +2,15 @@ import Image from "next/image";
 import logo from "@/assets/scribepilot-logo.png";
 
 const footerLinks = [
-  { label: "Privacy", href: "#" },
-  { label: "Terms", href: "#" },
-  { label: "Security", href: "#security" },
+  { label: "User Consent", href: "/consent" },
+  { label: "EULA", href: "/eula" },
 ];
 
 export default function Footer() {
   return (
     <footer className="border-t border-border py-8">
       <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <a href="#" className="flex items-center">
+        <a href="/" className="flex items-center">
           <Image src={logo} alt="ScribePilot" height={50}/>
           <p className="bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent">ScribePilot</p>
         </a>
