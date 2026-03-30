@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
+import logo from "@/assets/scribepilot-logo.png";
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -28,8 +30,9 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
-        <a href="#" className="text-lg font-bold tracking-tight text-text-primary">
-          ScribePilot
+        <a href="#" className="flex items-center text-xl">
+          <Image src={logo} alt="ScribePilot" height={50} priority />
+          <p className="bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent">ScribePilot</p>
         </a>
 
         {/* Center links — desktop */}

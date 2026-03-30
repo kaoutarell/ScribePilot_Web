@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import inlineCompletionGif from "@/assets/inline-completion-gif.gif";
 
 export default function HeroSection() {
   return (
@@ -58,92 +59,32 @@ export default function HeroSection() {
             </div>
           </motion.div>
 
-          {/* Right — code editor mock */}
+          {/* Right — inline completion GIF */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.15 }}
             className="relative"
           >
-            <div className="relative rounded-xl border border-border bg-card overflow-hidden shadow-2xl shadow-black/50">
-              {/* Title bar */}
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-card">
+            {/* Subtle glow behind the frame */}
+            <div className="absolute -inset-4 bg-accent/5 rounded-2xl blur-2xl pointer-events-none" />
+            <div className="relative rounded-xl border border-white/[0.08] bg-card overflow-hidden shadow-2xl shadow-black/60 ring-1 ring-white/[0.04]">
+              {/* VS Code-style title bar */}
+              <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/[0.06] bg-black/20">
                 <div className="flex gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-red-500/60" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
-                  <div className="w-3 h-3 rounded-full bg-green-500/60" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/50" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/50" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/50" />
                 </div>
-                <span className="text-xs text-text-tertiary ml-2 font-mono">
-                  auth.service.ts
-                </span>
+                <span className="text-xs text-text-tertiary font-mono ml-2">auth.service.ts</span>
               </div>
-
-              {/* Code area */}
-              <div className="p-5 font-mono text-sm leading-7 overflow-x-auto">
-                <div className="text-text-tertiary">
-                  <span className="text-purple-400">import</span>{" "}
-                  <span className="text-text-primary">{"{ verify }"}</span>{" "}
-                  <span className="text-purple-400">from</span>{" "}
-                  <span className="text-green-400">{`'jsonwebtoken'`}</span>;
-                </div>
-                <div className="text-text-tertiary mt-1">
-                  <span className="text-purple-400">import</span>{" "}
-                  <span className="text-text-primary">{"{ db }"}</span>{" "}
-                  <span className="text-purple-400">from</span>{" "}
-                  <span className="text-green-400">{`'./database'`}</span>;
-                </div>
-                <div className="mt-3">
-                  <span className="text-purple-400">export async function</span>{" "}
-                  <span className="text-blue-400">authenticateUser</span>
-                  <span className="text-text-primary">(token: string) {"{"}</span>
-                </div>
-                <div className="pl-6">
-                  <span className="text-purple-400">const</span>{" "}
-                  <span className="text-text-primary">decoded = </span>
-                  <span className="text-blue-400">verify</span>
-                  <span className="text-text-primary">(token, process.env.</span>
-                  <span className="text-orange-400">JWT_SECRET</span>
-                  <span className="text-text-primary">);</span>
-                </div>
-
-                {/* Scribe trigger comment */}
-                <div className="pl-6 mt-2">
-                  <span className="text-text-tertiary italic">{"  // scribe: find and return the authenticated user"}</span>
-                </div>
-
-                {/* AI suggestion — ghost text */}
-                <div className="pl-6 mt-1 relative">
-                  <div className="absolute -left-3 top-0 bottom-0 w-0.5 bg-accent/50 rounded-full" />
-                  <span className="text-accent/70 italic">
-                    {"  const user = await db.users.findUnique({"}
-                  </span>
-                </div>
-                <div className="pl-6">
-                  <span className="text-accent/70 italic">
-                    {"    where: { id: decoded.sub }"}
-                  </span>
-                </div>
-                <div className="pl-6">
-                  <span className="text-accent/70 italic">
-                    {"  });"}
-                  </span>
-                </div>
-                <div className="pl-6">
-                  <span className="text-accent/70 italic">
-                    {"  if (!user) throw new AuthError('User not found');"}
-                  </span>
-                </div>
-                <div className="pl-6">
-                  <span className="text-accent/70 italic">
-                    {"  return user;"}
-                  </span>
-                </div>
-
-                <div className="mt-1">
-                  <span className="text-text-primary">{"}"}</span>
-                </div>
-              </div>
-
+              {/* GIF — autoplays and loops natively */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={inlineCompletionGif.src}
+                alt="ScribePilot inline completion demo"
+                className="w-full h-auto block"
+              />
             </div>
           </motion.div>
         </div>
